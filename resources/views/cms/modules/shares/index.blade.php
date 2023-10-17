@@ -17,7 +17,7 @@
                     </div>
                     <div class="page-description-actions">
                         <a class="btn btn-primary" href="{{ route('cms.shares.create') }}">
-                            Share {{ $titles['singular'] }}
+                            {{ $titles['singular'] }} Files
                         </a>
                     </div>
                 </div>
@@ -34,8 +34,7 @@
                                     <th>#</th>
                                     <th>Sender</th>
                                     <th>Title</th>
-                                    <th>Created At</th>
-                                    <th>Updated At</th>
+                                    <th>Sent At</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -47,25 +46,6 @@
                                                     Actions
                                                 </button>
                                                 <ul class="dropdown-menu">
-                                                    {{-- Edit Button --}}
-                                                    <li>
-                                                        <a class="dropdown-item" href="{{ route('cms.shares.edit', $share->id) }}">Edit</a>
-                                                    </li>
-
-                                                    {{-- Toggle Status Button --}}
-                                                    <li>
-                                                        <form action="{{ route('cms.shares.toggle', $share->id) }}" method="POST">
-                                                            @csrf
-                                                            <a class="dropdown-item" type="button" onclick="swalConfirm(event)">
-                                                                {{ $share->status ? 'Inactivate' : 'Activate' }}
-                                                            </a>
-                                                        </form>
-                                                    </li>
-
-                                                    <li>
-                                                        <hr class="dropdown-divider">
-                                                    </li>
-
                                                     {{-- Delete Button --}}
                                                     <li>
                                                         <form action="{{ route('cms.shares.destroy', $share->id) }}" method="POST">
@@ -83,7 +63,6 @@
                                         <td class="text-nowrap">Robert</td>
                                         <td class="text-nowrap">{{ $share->title }}</td>
                                         <td class="text-nowrap">{{ human_datetime($share->created_at) }}</td>
-                                        <td class="text-nowrap">{{ human_datetime($share->updated_at) }}</td>
                                     </tr>
                                 @empty
                                     <tr>

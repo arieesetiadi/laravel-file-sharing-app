@@ -74,15 +74,4 @@ class ShareService
     {
         return Share::query()->find($id)->delete();
     }
-
-    /**
-     * Toggle sharing status.
-     */
-    public function toggleStatus(string $id): int
-    {
-        $sharing = Share::query()->find($id);
-        $result = $sharing->update(['status' => !$sharing->status]);
-
-        return $result;
-    }
 }

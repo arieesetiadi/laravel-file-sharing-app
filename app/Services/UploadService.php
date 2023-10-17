@@ -4,44 +4,57 @@ namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
 class UploadService
 {
     /**
-     * Upload image path.
+     * Images upload path.
      */
-    private string $imageUploadPath;
+    protected string $imagePath = '/app/public/uploads/images';
 
     /**
-     * Upload file path.
+     * Files upload path.
      */
-    private string $fileUploadPath;
-
-    /**
-     * Initiate class value
-     */
-    public function __construct()
-    {
-        $this->imageUploadPath = storage_path('app/public/uploads/images');
-        $this->fileUploadPath = storage_path('app/public/uploads/files');
-    }
+    protected string $filePath = '/app/public/uploads/files';
 
     /**
      * Upload an image file with Intervention Image.
      */
-    public function uploadImage(UploadedFile $file, string $directory, string $old = null): string
+    public function image(UploadedFile $file, string $directory, string $old = null): string
     {
         // Prepare meta data
         $format = 'webp';
         $name = uniqid() . '.' . $format;
-        $path = $this->imageUploadPath . '/' . $directory . '/' . $name;
+        $path = storage_path($this->imagePath) . '/' . $directory . '/' . $name;
 
         // Save new image
-        Image::make($file)->encode($format)->save($path, 90);
+        Image::make($file)->encode($format)->save($path);
 
         // Remove old image
-        $this->remove($this->imageUploadPath, $directory, $old);
+        $this->remove(storage_path($this->imagePath), $directory, $old);
+
+        return $name;
+    }
+
+    /**
+     * Upload a file with laravel storage class.
+     */
+    public function file(UploadedFile $file, string $directory, string $old = null): string
+    {
+        // Prepare meta data
+        $format = $file->extension();
+        $name = uniqid() . '.' . $format;
+        $path = $this->filePath . '/' . $directory . '/' . $name;
+
+        // Save new file
+        /** @var Illuminate\Filesystem\FilesystemAdapter */
+        $storage = Storage::disk('root');
+        $storage->putFile($path, $file);
+
+        // Remove old file
+        $this->remove(storage_path($this->filePath), $directory, $old);
 
         return $name;
     }

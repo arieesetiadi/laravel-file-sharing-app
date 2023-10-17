@@ -16,7 +16,7 @@ class DashboardController extends Controller
         $data['title'] = 'Dashboard';
         $data['count'] = [
             'admin' => User::admin()->count(),
-            'customer' => User::customer()->count(),
+            'general' => User::general()->count(),
         ];
 
         return view('cms.dashboard', $data);

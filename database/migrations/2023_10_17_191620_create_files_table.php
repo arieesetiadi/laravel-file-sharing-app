@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('files', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('share_id')->constrained('shares');
+            $table->foreignUuid('share_id')->constrained('shares')->cascadeOnDelete();
             $table->string('name');
-            $table->string('url');
-            $table->string('type');
+            $table->string('extension');
             $table->timestamps();
         });
     }

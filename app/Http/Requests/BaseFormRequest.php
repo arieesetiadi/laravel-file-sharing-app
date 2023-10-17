@@ -20,6 +20,8 @@ class BaseFormRequest
             'password' => 'password',
             'password_confirmation' => 'password confirmation',
             'status' => 'status',
+            'files.*' => 'files',
+            'user_ids' => 'users'
         ];
     }
 }

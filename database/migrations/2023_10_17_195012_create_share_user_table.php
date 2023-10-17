@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('share_user', function (Blueprint $table) {
-            $table->foreignUuid('share_id')->constrained('shares');
-            $table->foreignUuid('user_id')->constrained('users');
+            $table->foreignUuid('share_id')->constrained('shares')->cascadeOnDelete();
+            $table->foreignUuid('user_id')->constrained('users')->cascadeOnDelete();
         });
     }
 

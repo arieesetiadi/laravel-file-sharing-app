@@ -4,13 +4,14 @@ namespace App\Http\Controllers\CMS\Modules;
 
 use App\Constants\UserRoleCode;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CMS\Sharing\StoreRequest;
-use App\Http\Requests\CMS\Sharing\UpdateRequest;
+use App\Http\Requests\CMS\Share\StoreRequest;
 use App\Services\ShareService;
+use App\Services\UploadService;
 use App\Services\UserService;
 use App\Traits\HasWebResponses;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 
 class ShareController extends Controller
 {
@@ -27,6 +28,11 @@ class ShareController extends Controller
     protected UserService $userService;
 
     /**
+     * File Upload service class.
+     */
+    protected UploadService $uploadService;
+
+    /**
      * Controller module path.
      */
     private string $module;
@@ -39,10 +45,11 @@ class ShareController extends Controller
     /**
      * Initiate resource service class.
      */
-    public function __construct(ShareService $shareService, UserService $userService)
+    public function __construct(ShareService $shareService, UserService $userService, UploadService $uploadService)
     {
         $this->shareService = $shareService;
         $this->userService = $userService;
+        $this->uploadService = $uploadService;
         $this->module = 'cms.modules.shares';
         $this->titles = [
             'singular' => 'Share',
@@ -85,61 +92,24 @@ class ShareController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
-        // Store file data
-        $result = $this->shareService->create($request->credentials());
+        DB::transaction(function () use ($request) {
+            // Store share
+            $share = $request->validatedShare();
+            $share = $this->shareService->create($share);
 
-        if (!$result) {
-            return $this->failed('Sorry, we could not complete the process. Please try again.');
-        }
+            // Upload files
+            foreach ($request->file('files') as $file) {
+                $fileData['name'] = $this->uploadService->file(file: $file, directory: 'shares');
+                $fileData['extension'] = $file->extension();
 
-        return $this->success('The process has been completed successfully.', route('cms.shares.index'));
-    }
+                $share->files()->create($fileData);
+            }
+            
+            // Attach share user
+            $share->receivingUsers()->attach($request->user_ids);
+        });
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id): View
-    {
-        $file = $this->shareService->find($id);
-        $view = $this->module . '.detail';
-        $data = [
-            'titles' => $this->titles,
-            'file' => $file,
-        ];
-
-        return view($view, $data);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id): View
-    {
-        $file = $this->shareService->find($id);
-        $view = $this->module . '.create-or-edit';
-        $data = [
-            'titles' => $this->titles,
-            'users' => $this->userService->getByRoleCode(UserRoleCode::GENERAL),
-            'file' => $file,
-            'edit' => true,
-        ];
-
-        return view($view, $data);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateRequest $request, string $id): RedirectResponse
-    {
-        // Update file data
-        $result = $this->shareService->update($id, $request->credentials());
-
-        if (!$result) {
-            return $this->failed('Sorry, we could not complete the process. Please try again.');
-        }
-
-        return $this->success('The process has been completed successfully.', route('cms.shares.index'));
+        return $this->success('The files has been shared successfully.', route('cms.shares.index'));
     }
 
     /**
@@ -149,21 +119,6 @@ class ShareController extends Controller
     {
         // Delete file data
         $result = $this->shareService->delete($id);
-
-        if (!$result) {
-            return $this->failed('Sorry, we could not complete the process. Please try again.');
-        }
-
-        return $this->success('The process has been completed successfully.', route('cms.shares.index'));
-    }
-
-    /**
-     * Change the specified resource status.
-     */
-    public function toggle(string $id): RedirectResponse
-    {
-        // Toggle file status
-        $result = $this->shareService->toggleStatus($id);
 
         if (!$result) {
             return $this->failed('Sorry, we could not complete the process. Please try again.');

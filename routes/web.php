@@ -46,15 +46,17 @@ Route::prefix('/system')->as('cms.')->middleware('locale.use:en')->group(functio
             Route::get('/excel', [UserController::class, 'excel'])->name('excel');
         });
 
-        // CMS Module Files
+        // CMS Module Shares
         Route::prefix('/shares')->as('shares.')->group(function () {
-            Route::post('/{share}/toggle', [ShareController::class, 'toggle'])->name('toggle');
+            Route::get('/', [ShareController::class, 'index'])->name('index');
+            Route::get('/create', [ShareController::class, 'create'])->name('create');
+            Route::post('/', [ShareController::class, 'store'])->name('store');
+            Route::delete('/{share}', [ShareController::class, 'destroy'])->name('destroy');
         });
 
         // CMS Resources
         Route::resources([
             'users' => UserController::class,
-            'shares' => ShareController::class
         ]);
 
         // CMS Logout

@@ -25,8 +25,8 @@
                                 <i class="material-icons-outlined">person</i>
                             </div>
                             <div class="widget-stats-content flex-fill">
-                                <span class="widget-stats-title">Total Customers</span>
-                                <span class="widget-stats-amount">{{ $count['customer'] }}</span>
+                                <span class="widget-stats-title">Total General Users</span>
+                                <span class="widget-stats-amount">{{ $count['general'] }}</span>
                                 <span class="widget-stats-info">141 Orders Total</span>
                             </div>
                             <div class="widget-stats-indicator widget-stats-indicator-positive align-self-start">

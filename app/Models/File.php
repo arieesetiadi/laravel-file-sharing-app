@@ -20,7 +20,7 @@ class File extends Model
     /**
      * Allowed field for mass assignment.
      */
-    protected $fillable = ['share_id', 'name', 'url', 'type'];
+    protected $fillable = ['share_id', 'name', 'extension'];
 
     /*
     |--------------------------------------------------------------------------
