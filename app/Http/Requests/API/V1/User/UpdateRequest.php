@@ -63,7 +63,7 @@ class UpdateRequest extends FormRequest
             'name' => $this->name,
             'email' => $this->email,
             'phone' => normalize_phone($this->phone),
-            'user_role_id' => UserRole::query()->where('code', UserRoleCode::CUSTOMER)->first()->id,
+            'user_role_id' => UserRole::query()->where('code', UserRoleCode::GENERAL)->first()->id,
             'status' => GeneralStatus::ACTIVE,
         ];
 
