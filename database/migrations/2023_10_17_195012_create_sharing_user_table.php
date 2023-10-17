@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sharing_user', function (Blueprint $table) {
-            $table->foreignUuid('sharing_id')->constrained('sharings');
+        Schema::create('share_user', function (Blueprint $table) {
+            $table->foreignUuid('share_id')->constrained('shares');
             $table->foreignUuid('user_id')->constrained('users');
         });
     }
@@ -22,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sharing_user');
+        Schema::dropIfExists('share_user');
     }
 };

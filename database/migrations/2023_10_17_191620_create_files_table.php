@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('files', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('sharing_id')->constrained('sharings');
+            $table->foreignUuid('share_id')->constrained('shares');
             $table->string('name');
             $table->string('url');
             $table->timestamps();
