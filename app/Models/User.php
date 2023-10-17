@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -48,8 +50,25 @@ class User extends Authenticatable
      */
     public function role(): BelongsTo
     {
-        return $this->belongsTo(UserRole::class, 'user_role_id');
+        return $this->belongsTo(UserRole::class);
     }
+
+    /**
+     * All sender's shares.
+     */
+    public function sentShares(): HasMany
+    {
+        return $this->hasMany(Share::class, 'sender_user_id');
+    }
+
+    /**
+     * All general user's received shares.
+     */
+    public function receivedShares(): BelongsToMany
+    {
+        return $this->belongsToMany(Share::class);
+    }
+
 
     /*
     |--------------------------------------------------------------------------
@@ -88,9 +107,9 @@ class User extends Authenticatable
     }
 
     /**
-     * Filter the user with role Customer.
+     * Filter the user with role General.
      */
-    public function scopeCustomer(Builder $query): Builder
+    public function scopeGeneral(Builder $query): Builder
     {
         return $query->whereHas('role', function ($query) {
             return $query->where('code', UserRoleCode::GENERAL);

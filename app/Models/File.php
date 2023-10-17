@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Constants\GeneralStatus;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,7 +20,7 @@ class File extends Model
     /**
      * Allowed field for mass assignment.
      */
-    protected $fillable = ['name', 'url', 'sender_user_id'];
+    protected $fillable = ['share_id', 'name', 'url', 'type'];
 
     /*
     |--------------------------------------------------------------------------
@@ -31,11 +29,11 @@ class File extends Model
     */
 
     /**
-     * File's sender.
+     * File's share parent.
      */
-    public function sender(): BelongsTo
+    public function share(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'sender_user_id');
+        return $this->belongsTo(Share::class);
     }
 
     /*
@@ -55,20 +53,4 @@ class File extends Model
     | Scopes
     |--------------------------------------------------------------------------
     */
-
-    /**
-     * Filter the active user.
-     */
-    public function scopeActive(Builder $query): Builder
-    {
-        return $query->where('status', GeneralStatus::ACTIVE);
-    }
-
-    /**
-     * Filter the inactive user.
-     */
-    public function scopeInactive(Builder $query): Builder
-    {
-        return $query->where('status', GeneralStatus::INACTIVE);
-    }
 }
