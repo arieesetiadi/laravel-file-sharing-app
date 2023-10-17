@@ -14,8 +14,6 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::truncate();
-
         foreach (UserRole::all() as $userRole) {
             User::query()->create([
                 'user_role_id' => $userRole->id,
@@ -27,7 +25,6 @@ class UserSeeder extends Seeder
             ]);
         }
 
-        // User Factory
-        User::factory(100)->create();
+        User::factory(10)->create();
     }
 }

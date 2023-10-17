@@ -12,9 +12,9 @@ class UserRoleCode
     public const ADMIN = 1;
 
     /**
-     * Customer role value.
+     * General role value.
      *
      * @var int
      */
-    public const CUSTOMER = 2;
+    public const GENERAL = 2;
 }

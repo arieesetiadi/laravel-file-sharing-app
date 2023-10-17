@@ -12,8 +12,6 @@ class UserRoleSeeder extends Seeder
      */
     public function run(): void
     {
-        UserRole::truncate();
-
         $userRoles = [
             [
                 'code' => 1,
@@ -21,7 +19,7 @@ class UserRoleSeeder extends Seeder
             ],
             [
                 'code' => 2,
-                'name' => 'Customer',
+                'name' => 'General',
             ],
         ];
 

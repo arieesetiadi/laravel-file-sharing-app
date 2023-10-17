@@ -12,12 +12,12 @@ return new class () extends Migration {
     {
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('user_role_id');
+            $table->foreignUuid('user_role_id')->constrained('user_roles');
             $table->string('username')->unique();
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone', 20)->unique()->nullable();
-            $table->string('password')->default(bcrypt('password'));
+            $table->string('password');
             $table->boolean('status')->nullable(false)->default(false);
             $table->timestamps();
         });

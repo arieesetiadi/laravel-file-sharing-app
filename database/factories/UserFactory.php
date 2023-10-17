@@ -28,7 +28,7 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_role_id' => UserRole::query()->where('code', UserRoleCode::CUSTOMER)->value('id'),
+            'user_role_id' => UserRole::query()->where('code', UserRoleCode::GENERAL)->value('id'),
             'username' => fake()->unique()->userName,
             'name' => fake()->name,
             'email' => fake()->unique()->email,
