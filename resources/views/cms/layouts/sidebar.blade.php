@@ -34,6 +34,12 @@
                     Users
                 </a>
             </li>
+            <li class="{{ $sidebar['shares'] ?? '' }}">
+                <a href="{{ route('cms.shares.index') }}">
+                    <i class="material-icons text-dark">description</i>
+                    File Shares
+                </a>
+            </li>
         </ul>
     </div>
 </div>

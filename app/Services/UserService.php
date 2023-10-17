@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 class UserService
@@ -100,5 +101,19 @@ class UserService
         $result = $user->update(['status' => !$user->status]);
 
         return $result;
+    }
+
+    /**
+     * Get users by role.
+     */
+    public function getByRoleCode(int $code): Collection
+    {
+        $users = User::query()
+            ->whereHas('role', function (Builder $query) use ($code) {
+                return $query->where('code', $code);
+            })
+            ->get();
+
+        return $users;
     }
 }

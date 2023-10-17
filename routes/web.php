@@ -4,6 +4,7 @@ use App\Http\Controllers\AppController;
 use App\Http\Controllers\CMS\Auth\LoginController;
 use App\Http\Controllers\CMS\Auth\LogoutController;
 use App\Http\Controllers\CMS\DashboardController;
+use App\Http\Controllers\CMS\Modules\ShareController;
 use App\Http\Controllers\CMS\Modules\UserController;
 use App\Http\Controllers\LocaleController;
 use Illuminate\Support\Facades\Route;
@@ -44,7 +45,17 @@ Route::prefix('/system')->as('cms.')->middleware('locale.use:en')->group(functio
             Route::post('/{user}/toggle', [UserController::class, 'toggle'])->name('toggle');
             Route::get('/excel', [UserController::class, 'excel'])->name('excel');
         });
-        Route::resource('/users', UserController::class);
+
+        // CMS Module Files
+        Route::prefix('/shares')->as('shares.')->group(function () {
+            Route::post('/{share}/toggle', [ShareController::class, 'toggle'])->name('toggle');
+        });
+
+        // CMS Resources
+        Route::resources([
+            'users' => UserController::class,
+            'shares' => ShareController::class
+        ]);
 
         // CMS Logout
         Route::prefix('/auth/logout')->as('auth.logout.')->group(function () {

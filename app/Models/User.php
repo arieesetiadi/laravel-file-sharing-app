@@ -93,7 +93,7 @@ class User extends Authenticatable
     public function scopeCustomer(Builder $query): Builder
     {
         return $query->whereHas('role', function ($query) {
-            return $query->where('code', UserRoleCode::CUSTOMER);
+            return $query->where('code', UserRoleCode::GENERAL);
         });
     }
 

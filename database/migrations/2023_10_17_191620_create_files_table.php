@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignUuid('share_id')->constrained('shares');
             $table->string('name');
             $table->string('url');
+            $table->string('type');
             $table->timestamps();
         });
     }
