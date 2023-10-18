@@ -18,7 +18,7 @@
         <div class="row mb-3">
             <div class="col">
                 <div class="page-description px-0">
-                    <h1>{{ $edit ? 'Edit' : 'Add' }} {{ $titles['singular'] }}</h1>
+                    <h1>Share Files</h1>
                 </div>
             </div>
         </div>

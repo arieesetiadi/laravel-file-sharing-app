@@ -22,6 +22,11 @@ class File extends Model
      */
     protected $fillable = ['share_id', 'name', 'extension'];
 
+    /**
+     * New field for the result.
+     */
+    protected $append = ['url'];
+
     /*
     |--------------------------------------------------------------------------
     | Relations
@@ -41,6 +46,14 @@ class File extends Model
     | Accessors
     |--------------------------------------------------------------------------
     */
+
+    /**
+     * Get file url.
+     */
+    public function getUrlAttribute()
+    {
+        return asset('storage/uploads/files/shares/' . $this->name);
+    }
 
     /*
     |--------------------------------------------------------------------------

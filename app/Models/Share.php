@@ -51,7 +51,7 @@ class Share extends Model
      */
     public function files(): HasMany
     {
-        return $this->hasMany(File::class);
+        return $this->hasMany(File::class, 'share_id')->orderBy('extension');
     }
 
     /*

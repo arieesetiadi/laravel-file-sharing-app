@@ -65,11 +65,6 @@ class LoginController extends Controller
             return $this->failed('Your account is inactive.');
         }
 
-        // Check user role
-        if ($user->role->code !== UserRoleCode::ADMIN) {
-            return $this->failed('Invalid credential or password. Please try again.');
-        }
-
         // Check auth result
         if (!auth('cms')->attempt($credentials)) {
             return $this->failed('Invalid credential or password. Please try again.');

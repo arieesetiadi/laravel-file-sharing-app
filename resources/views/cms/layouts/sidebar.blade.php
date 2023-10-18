@@ -19,27 +19,33 @@
             <li class="sidebar-title">
                 Main
             </li>
+
             <li class="{{ $sidebar['dashboard'] ?? '' }}">
                 <a href="{{ route('cms.dashboard') }}">
                     <i class="material-icons text-dark">dashboard</i>
                     Dashboard
                 </a>
             </li>
-            <li class="sidebar-title">
-                Master
-            </li>
-            <li class="{{ $sidebar['users'] ?? '' }}">
-                <a href="{{ route('cms.users.index') }}">
-                    <i class="material-icons text-dark">people</i>
-                    Users
-                </a>
-            </li>
-            <li class="{{ $sidebar['shares'] ?? '' }}">
-                <a href="{{ route('cms.shares.index') }}">
-                    <i class="material-icons text-dark">description</i>
-                    File Shares
-                </a>
-            </li>
+
+            @if (auth()->user()->is_admin)
+                <li class="sidebar-title">
+                    Master
+                </li>
+
+                <li class="{{ $sidebar['users'] ?? '' }}">
+                    <a href="{{ route('cms.users.index') }}">
+                        <i class="material-icons text-dark">people</i>
+                        Users
+                    </a>
+                </li>
+
+                <li class="{{ $sidebar['shares'] ?? '' }}">
+                    <a href="{{ route('cms.shares.index') }}">
+                        <i class="material-icons text-dark">description</i>
+                        File Shares
+                    </a>
+                </li>
+            @endif
         </ul>
     </div>
 </div>

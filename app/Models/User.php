@@ -10,8 +10,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -37,7 +39,7 @@ class User extends Authenticatable
     /**
      * New field for the result.
      */
-    protected $append = ['avatar_path'];
+    protected $append = ['avatar_path', 'is_admin', 'is_general', 'received_files'];
 
     /*
     |--------------------------------------------------------------------------
@@ -66,9 +68,8 @@ class User extends Authenticatable
      */
     public function receivedShares(): BelongsToMany
     {
-        return $this->belongsToMany(Share::class);
+        return $this->belongsToMany(Share::class)->latest();
     }
-
 
     /*
     |--------------------------------------------------------------------------
@@ -82,6 +83,32 @@ class User extends Authenticatable
     public function getAvatarPathAttribute(): string
     {
         return asset('assets/cms/images/profiles/default.png');
+    }
+
+    /**
+     * Get is admin value.
+     */
+    public function getIsAdminAttribute(): string
+    {
+        return $this->role->code == UserRoleCode::ADMIN;
+    }
+
+    /**
+     * Get is general value.
+     */
+    public function getIsGeneralAttribute(): string
+    {
+        return $this->role->code == UserRoleCode::GENERAL;
+    }
+
+    /**
+     * Get all general users received filed
+     */
+    public function getReceivedFilesAttribute(): Collection
+    {
+        return $this->receivedShares->flatMap(function ($share) {
+            return $share->files;
+        });
     }
 
     /*

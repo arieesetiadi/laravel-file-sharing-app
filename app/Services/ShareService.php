@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Share;
+use App\Models\User;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -73,5 +74,16 @@ class ShareService
     public function delete(string $id): int
     {
         return Share::query()->find($id)->delete();
+    }
+
+    /**
+     * Get shares data by user id.
+     */
+    public function getByUserId(string $id): Collection
+    {
+        $user = User::query()->with('receivedShares.files')->find($id);
+        $shares = $user->receivedShares;
+
+        return $shares;
     }
 }

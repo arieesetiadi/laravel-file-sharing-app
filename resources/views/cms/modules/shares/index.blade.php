@@ -17,7 +17,7 @@
                     </div>
                     <div class="page-description-actions">
                         <a class="btn btn-primary" href="{{ route('cms.shares.create') }}">
-                            {{ $titles['singular'] }} Files
+                            Share Files
                         </a>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
                                             </div>
                                         </td>
                                         <td class="text-nowrap">{{ $i + 1 }}</td>
-                                        <td class="text-nowrap">Robert</td>
+                                        <td class="text-nowrap">{{ $share->sendingUser->name }}</td>
                                         <td class="text-nowrap">{{ $share->title }}</td>
                                         <td class="text-nowrap">{{ human_datetime($share->created_at) }}</td>
                                     </tr>

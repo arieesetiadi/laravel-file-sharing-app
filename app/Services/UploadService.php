@@ -46,12 +46,12 @@ class UploadService
         // Prepare meta data
         $format = $file->extension();
         $name = uniqid() . '.' . $format;
-        $path = $this->filePath . '/' . $directory . '/' . $name;
+        $path = $this->filePath . '/' . $directory;
 
         // Save new file
         /** @var Illuminate\Filesystem\FilesystemAdapter */
         $storage = Storage::disk('root');
-        $storage->putFile($path, $file);
+        $storage->putFileAs(path: $path, file: $file, name: $name);
 
         // Remove old file
         $this->remove(storage_path($this->filePath), $directory, $old);
