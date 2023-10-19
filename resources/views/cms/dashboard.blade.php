@@ -150,7 +150,7 @@
                                         <th>Shared</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="received-shares">
                                     @forelse ($shares as $i => $share)
                                         <tr>
                                             <td class="text-nowrap">{{ $share->title }}</td>
@@ -201,7 +201,7 @@
         <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
         <script>
             // Enable pusher logging - don't include this in production
-            Pusher.logToConsole = true;
+            Pusher.logToConsole = false;
 
             const pusher = new Pusher(`{{ config('broadcasting.connections.pusher.key') }}`, {
                 cluster: `{{ config('broadcasting.connections.pusher.options.cluster') }}`
@@ -235,7 +235,7 @@
                         </tr>
                     `;
 
-                    $('tbody').prepend(newRowElement);
+                    $('tbody#received-shares').prepend(newRowElement);
                 }
             });
         </script>
