@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\CMS\Modules;
 
 use App\Constants\UserRoleCode;
+use App\Events\FilesSharedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CMS\Share\StoreRequest;
 use App\Services\ShareService;
@@ -104,9 +105,12 @@ class ShareController extends Controller
 
                 $share->files()->create($fileData);
             }
-            
+
             // Attach share user
             $share->receivingUsers()->attach($request->user_ids);
+            $share->load(['sendingUser', 'receivingUsers', 'files']);
+
+            FilesSharedEvent::dispatch($share);
         });
 
         return $this->success('The files has been shared successfully.', route('cms.shares.index'));

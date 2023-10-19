@@ -60,6 +60,22 @@ class Share extends Model
     |--------------------------------------------------------------------------
     */
 
+    /**
+     * Get formatted created at.
+     */
+    public function getCreatedAtAttribute($createdAt)
+    {
+        return human_datetime_diff($createdAt);
+    }
+
+    /**
+     * Get formatted updated at.
+     */
+    public function getUpdatedAtAttribute($updatedAt)
+    {
+        return human_datetime_diff($updatedAt);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Mutators

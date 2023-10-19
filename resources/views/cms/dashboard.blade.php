@@ -20,7 +20,7 @@
         {{-- Admin Only --}}
         @if (auth()->user()->is_admin)
             <div class="row">
-                <div class="col-12 col-sm-6 col-lg-6">
+                <div class="col-12 col-sm-12 col-lg-6">
                     <div class="card widget widget-stats">
                         <div class="card-body">
                             <div class="widget-stats-container d-flex">
@@ -38,7 +38,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-sm-6 col-lg-6">
+                <div class="col-12 col-sm-12 col-lg-6">
                     <div class="card widget widget-stats">
                         <div class="card-body">
                             <div class="widget-stats-container d-flex">
@@ -62,7 +62,7 @@
         {{-- General Only --}}
         @if (auth()->user()->is_general)
             <div class="row">
-                <div class="col-12 col-sm-6 col-lg-6">
+                <div class="col-12 col-sm-12 col-lg-6">
                     <div class="card widget widget-stats">
                         <div class="card-body">
                             <div class="widget-stats-container d-flex">
@@ -80,8 +80,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-sm-6 col-lg-6">
-                    <div class="card widget widget-stats cursor-pointer" data-bs-toggle="modal" data-bs-target="#files-modal">
+                <div class="col-12 col-sm-12 col-lg-6">
+                    <div class="card widget widget-stats cursor-pointer" data-bs-toggle="modal"
+                        data-bs-target="#files-modal">
                         <div class="card-body">
                             <div class="widget-stats-container d-flex">
                                 <div class="widget-stats-icon widget-stats-icon-primary">
@@ -99,8 +100,8 @@
                     </div>
 
                     <!-- Modal -->
-                    <div class="modal fade" id="files-modal" tabindex="-1"
-                        aria-labelledby="files-modal-label" aria-hidden="true">
+                    <div class="modal fade" id="files-modal" tabindex="-1" aria-labelledby="files-modal-label"
+                        aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -139,85 +140,43 @@
                         <div class="card-header">
                             <h6>Received Shares</h6>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body table-responsive">
                             <table class="w-100 datatable table">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>Sender</th>
                                         <th>Title</th>
-                                        <th>Details</th>
-                                        <th>Sent At</th>
+                                        <th>Description</th>
+                                        <th>Files</th>
+                                        <th>Shared</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($shares as $i => $share)
                                         <tr>
-                                            <td class="text-nowrap">{{ $i + 1 }}</td>
-                                            <td class="text-nowrap">{{ $share->sendingUser->name }}</td>
                                             <td class="text-nowrap">{{ $share->title }}</td>
+                                            <td class="text-nowrap">{{ $share->description }}</td>
 
                                             <td class="text-nowrap">
-                                                <!-- Button trigger modal -->
-                                                <a type="button" class="text-decoration-none" href="#"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#detail-modal-{{ $i }}">
-                                                    Detail
-                                                </a>
+                                                <div class="dropdown">
+                                                    <a class="dropdown-toggle" href="javascript:void(0)" role="button"
+                                                        id="dropdown-links-{{ $share->id }}" data-bs-toggle="dropdown"
+                                                        aria-expanded="false">
+                                                        Files
+                                                    </a>
 
-                                                <!-- Modal -->
-                                                <div class="modal fade" id="detail-modal-{{ $i }}"
-                                                    tabindex="-1" aria-labelledby="detail-modal-{{ $i }}-label"
-                                                    aria-hidden="true">
-                                                    <div class="modal-dialog modal-lg">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title"
-                                                                    id="detail-modal-{{ $i }}-label">Detail
-                                                                    Share
-                                                                </h5>
-                                                                <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <table class="w-100 table">
-                                                                    <tr>
-                                                                        <td>Title</td>
-                                                                        <td>:</td>
-                                                                        <td>{{ $share->title }}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Description</td>
-                                                                        <td>:</td>
-                                                                        <td>{{ $share->description ?: '-' }}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Sent At</td>
-                                                                        <td>:</td>
-                                                                        <td>{{ human_datetime($share->created_at) }}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Shared Files</td>
-                                                                        <td>:</td>
-                                                                        <td>
-                                                                            <ol class="px-3">
-                                                                                @foreach ($share->files as $file)
-                                                                                    <li>
-                                                                                        <a target="_blank"
-                                                                                            href="{{ asset($file->url) }}">{{ $file->name }}</a>
-                                                                                    </li>
-                                                                                @endforeach
-                                                                            </ol>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdown-links-{{ $share->id }}">
+                                                        @foreach ($share->files as $file)
+                                                            <li>
+                                                                <a target="_blank" class="dropdown-item" href="{{ asset($file->url) }}">
+                                                                    {{ $file->name }}
+                                                                </a>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
                                                 </div>
                                             </td>
 
-                                            <td class="text-nowrap">{{ human_datetime($share->created_at) }}</td>
+                                            <td class="text-nowrap">{{ $share->created_at }} by {{ $share->sendingUser->name }}</td>
                                         </tr>
                                     @empty
                                         <tr>
@@ -236,69 +195,67 @@
     </div>
 @endsection
 
-@pushOnce('after-scripts')
-    {{-- Apex Chart --}}
-    <script src="{{ asset('assets/cms/plugins/apexcharts/apexcharts.min.js') }}"></script>
-    <script>
-        const chart = new ApexCharts(
-            document.querySelector("#chart"), {
-                chart: {
-                    height: 350,
-                    type: 'bar',
-                    toolbar: {
-                        show: true
-                    }
-                },
-                plotOptions: {
-                    bar: {
-                        horizontal: false,
-                        columnWidth: '55%',
-                        endingShape: 'rounded',
-                        borderRadius: 10
-                    },
-                },
-                dataLabels: {
-                    enabled: false
-                },
-                stroke: {
-                    show: true,
-                    width: 2,
-                    colors: ['transparent']
-                },
-                series: [{
-                    name: 'Net Profit',
-                    data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
-                }, {
-                    name: 'Revenue',
-                    data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
-                }],
-                xaxis: {
-                    categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
-                    labels: {
-                        style: {
-                            colors: 'rgba(94, 96, 110, .5)'
-                        }
-                    }
-                },
-                yaxis: {
-                    title: {
-                        text: '$ (thousands)'
-                    }
-                },
-                tooltip: {
-                    y: {
-                        formatter: function(val) {
-                            return "$ " + val + " thousands"
-                        }
-                    }
-                },
-                grid: {
-                    borderColor: '#e2e6e9',
-                    strokeDashArray: 4
-                }
-            }
-        );
+{{-- Realtime Client --}}
+@if (auth()->user()->is_general)
+    @pushOnce('after-scripts')
+        <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+        <script>
+            // Enable pusher logging - don't include this in production
+            Pusher.logToConsole = true;
 
-        chart.render();
-    </script>
-@endPushOnce
+            const pusher = new Pusher(`{{ config('broadcasting.connections.pusher.key') }}`, {
+                cluster: `{{ config('broadcasting.connections.pusher.options.cluster') }}`
+            });
+
+            const channel = pusher.subscribe('files-sharing-channel');
+
+            channel.bind('files-shared-event', function({share}) {
+                if (share.receiving_users.some(user => user.id == `{{ auth()->id() }}`)) {
+                    let key = Date.now();
+                    let newRowElement = `
+                        <tr role="row">
+                            <td class="text-nowrap">${share.title}</td>
+                            <td class="text-nowrap">${share.description}</td>
+
+                            <td class="text-nowrap">
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle" href="javascript:void(0)" role="button"
+                                        id="dropdown-links-${share.id}" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        Files
+                                    </a>
+
+                                    <ul class="dropdown-menu" aria-labelledby="dropdown-links-${share.id}">
+                                        ${generateFileLinks(share.files)}
+                                    </ul>
+                                </div>
+                            </td>
+
+                            <td class="text-nowrap">${share.created_at} by ${share.sending_user.name}</td>
+                        </tr>
+                    `;
+
+                    $('tbody').prepend(newRowElement);
+                }
+            });
+        </script>
+
+        <script>
+            function generateFileLinks(files) {
+                let fileLinks = '';
+
+                files.forEach(file => {
+                    fileLinks += `
+                        <li>
+                            <a target="_blank" class="dropdown-item" href="{{ asset('storage/uploads/files/shares') }}/${file.name}">
+                                ${file.name}
+                            </a>
+                        </li>
+                    `;
+                });
+
+                return fileLinks;
+            }
+        </script>
+    @endPushOnce
+@endif

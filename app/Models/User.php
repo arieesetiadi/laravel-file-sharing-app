@@ -88,7 +88,7 @@ class User extends Authenticatable
     /**
      * Get is admin value.
      */
-    public function getIsAdminAttribute(): string
+    public function getIsAdminAttribute(): bool
     {
         return $this->role->code == UserRoleCode::ADMIN;
     }
@@ -96,7 +96,7 @@ class User extends Authenticatable
     /**
      * Get is general value.
      */
-    public function getIsGeneralAttribute(): string
+    public function getIsGeneralAttribute(): bool
     {
         return $this->role->code == UserRoleCode::GENERAL;
     }

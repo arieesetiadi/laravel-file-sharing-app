@@ -26,7 +26,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body table-responsive">
                         <table class="w-100 table datatable">
                             <thead>
                                 <tr>
@@ -62,7 +62,7 @@
                                         <td class="text-nowrap">{{ $i + 1 }}</td>
                                         <td class="text-nowrap">{{ $share->sendingUser->name }}</td>
                                         <td class="text-nowrap">{{ $share->title }}</td>
-                                        <td class="text-nowrap">{{ human_datetime($share->created_at) }}</td>
+                                        <td class="text-nowrap">{{ $share->created_at }}</td>
                                     </tr>
                                 @empty
                                     <tr>
