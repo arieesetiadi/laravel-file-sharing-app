@@ -44,7 +44,7 @@ class UploadService
     public function file(UploadedFile $file, string $directory, string $old = null): string
     {
         // Prepare meta data
-        $format = $file->extension();
+        $format = $file->getClientOriginalExtension();
         $name = uniqid() . '.' . $format;
         $path = $this->filePath . '/' . $directory;
 

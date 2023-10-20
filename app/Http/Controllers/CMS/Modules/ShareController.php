@@ -101,8 +101,7 @@ class ShareController extends Controller
             // Upload files
             foreach ($request->file('files') as $file) {
                 $fileData['name'] = $this->uploadService->file(file: $file, directory: 'shares');
-                $fileData['extension'] = $file->extension();
-
+                $fileData['extension'] = $file->getClientOriginalExtension();
                 $share->files()->create($fileData);
             }
 
